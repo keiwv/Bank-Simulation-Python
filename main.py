@@ -1,65 +1,81 @@
+from Bank import Bank
+from Account import Account
+import os
 
-import random 
+def displayMenuMsg():
+    userInput = -1
+    while (userInput < 0 or userInput >= 5):
+        os.system("clear")
+        print("---- MENU -----")
+        print("1.- Iniciar sesión")
+        print("2.- Registrar usuario")
+        print("0.- Salir")
+        userInput = int(input("Ingresa tu opcion: "))
+    return userInput
 
-class Bank:
-    def __init__(self, name, ch_count, accounts=None):
-        self._name = name
-        self.__ch_count = ch_count
-        self._accounts = accounts if accounts is not None else []
+def getUserLogIn():
+    os.system("clear")
+    print("----- INGRESA TUS DATOS ------")
+    accountNumberInput = int(input("Ingresa tu numero de cuenta: "))
+    accountUserPassword = input("Ingresa tu contraseña: ") 
+    return accountNumberInput, accountUserPassword
 
-    def addNewAccount(self, account):
-        self._accounts.append(account)
-        self.__ch_count += 1
-        account.account_number = self.generateAccountNumber()
+def verifyUserLogIn(userNumber, userPassword):
+    for account in BancoBienestar._accounts:
+        if account.account_number == userNumber and account.password == userPassword:
+            return account
+    return None
 
-    def displayAllAccounts(self):
-        for account in self._accounts:
-            print(f"Nombre: {account._name}")
-            print(f"Edad: {account._age}")
-            print(f"Sexo: {account._sex}")
-            print(f"Número de teléfono: {account._phone_number}")
-            print(f"Número de cuenta: {account.account_number}")
-            print(f"Saldo: ${account._balance}")
-            print()
+def verifyUserLogInMenu():
+    while True:
+        userNumber, userPassword = getUserLogIn()
+        userAccount = verifyUserLogIn(userNumber, userPassword)
 
-    def generateAccountNumber(self):
-        while True:
-            account_number = random.randint(30000, 40000)
-            if account_number not in self._accounts:
-                return account_number
-
-class Account:
-    def __init__(self, name, age, sex, phone_number, password, initial_balance=0):
-        self._name = name
-        self._age = age
-        self._sex = sex
-        self._phone_number = phone_number
-        self._balance = initial_balance
-        self._transactions = []
-        self._password = password
-        self.account_number = 0
-
-    def sendAmount(self, amount, recipient_account):
-        if self._balance >= amount:
-            self._balance -= amount
-            recipient_account.receiveAmount(amount)
-            self._transactions.append(f'Transferencia enviada: -${amount}.')
+        if userAccount is not None:
+            return userAccount
         else:
-            print("Fondos insuficientes para realizar el envío")
+            print("Numero de cuenta o contraseña incorrecta, intenta de nuevo")
+            if (int(input("Desea salir? (1.- Sí / 0.- No): "))):
+                break
+    return None
 
-    def receiveAmount(self, amount):
-        self._balance += amount
-        self._transactions.append(f'Transferencia recibida: +${amount}.')
+def loggedInMsg():
+    os.system("clear")
+    print("----- REALIZA OPERACIONES ----- ")
+    print("1.- Transferir")
+    print("2.- Depositar")
+    print("3.- Retirar")
+    print("4.- Mostrar saldo")
+    print("0.- Cerrar sesión")
+    return int(input("Selecciona tu opción: "))
 
 
-# Testing
-# BancoBienestar = Bank("Bienestar", 0)
-# nueva_cuenta = Account("Brayan", 19, "Hombre", 5727382, "hola", 1000)
-# BancoBienestar.addNewAccount(nueva_cuenta)
-# old_cuenta = Account("Robasdn", 19, "Hombre", 5727382, "hola", 1000)
-# BancoBienestar.addNewAccount(old_cuenta)
-# 
-# nueva_cuenta.sendAmount(100, old_cuenta)
-# 
-# BancoBienestar.displayAllAccounts()
+def loggedInMenu(userAccount):
+    userOption = -1
+    while userOption != 0:
+        userOption = loggedInMenu()
+
+def menu():
+    op = -1
+    while op != 0:
+        op = displayMenuMsg()
+        if op == 1:
+            userAccount = verifyUserLogInMenu()
+            if userAccount is not None:
+                loggedInMenu(userAccount)
+            
+            
+
+op = 1
+BancoBienestar = Bank("Bienestar")
+
+menu()
+
+
+
+
+
+
+
+
 

@@ -1,11 +1,26 @@
 from Bank import Bank
 from Account import Account
 import os
+import platform
 
+system = platform.system()
+
+if system == "Windows":
+    clear = "cls"
+else:
+    clear = "clear"
+
+# --------------- USEFUL FUNCTIONS ----------
+def clearConsole():
+    os.system(clear)
+
+def pauseConsole():
+    input("Presiona enter para continuar...")
+# ---------------- MENU FUNCTIONS --------
 def displayMenuMsg():
     userInput = -1
     while (userInput < 0 or userInput >= 5):
-        os.system("clear")
+        clearConsole()
         print("---- MENU -----")
         print("1.- Iniciar sesión")
         print("2.- Registrar usuario")
@@ -13,8 +28,20 @@ def displayMenuMsg():
         userInput = int(input("Ingresa tu opcion: "))
     return userInput
 
+def menu():
+    op = -1
+    while op != 0:
+        op = displayMenuMsg()
+        if op == 1:
+            userAccount = verifyUserLogInMenu()
+            if userAccount is not None:
+                loggedInMenu(userAccount)
+        elif op == 2:
+            registerUser()
+            
+# ------- LOG IN FUNCTIONS ----------
 def getUserLogIn():
-    os.system("clear")
+    clearConsole()
     print("----- INGRESA TUS DATOS ------")
     accountNumberInput = int(input("Ingresa tu numero de cuenta: "))
     accountUserPassword = input("Ingresa tu contraseña: ") 
@@ -22,7 +49,7 @@ def getUserLogIn():
 
 def verifyUserLogIn(userNumber, userPassword):
     for account in BancoBienestar._accounts:
-        if account.account_number == userNumber and account.password == userPassword:
+        if account.account_number == userNumber and account._password == userPassword:
             return account
     return None
 
@@ -38,9 +65,9 @@ def verifyUserLogInMenu():
             if (int(input("Desea salir? (1.- Sí / 0.- No): "))):
                 break
     return None
-
+# ---------- LOGGED IN FUNCTIONS ---------
 def loggedInMsg():
-    os.system("clear")
+    clearConsole()
     print("----- REALIZA OPERACIONES ----- ")
     print("1.- Transferir")
     print("2.- Depositar")
@@ -53,18 +80,38 @@ def loggedInMsg():
 def loggedInMenu(userAccount):
     userOption = -1
     while userOption != 0:
-        userOption = loggedInMenu()
+        userOption = loggedInMsg()
+        if userOption == 1:
+            transfer(userAccount)
 
-def menu():
-    op = -1
-    while op != 0:
-        op = displayMenuMsg()
-        if op == 1:
-            userAccount = verifyUserLogInMenu()
-            if userAccount is not None:
-                loggedInMenu(userAccount)
-            
-            
+# ----------- REGISTER FUNCTION -----------
+def registerUser():
+    clearConsole()
+    print("---- REGISTRAR USUARIO ------")
+    name = input("Ingresa el nombre de la cuenta: ")
+    age = input("Introduce la edad: ")
+    sex = input("Introduce tu sexo: ")
+    phone_number = int(input("Introduce tu numero de teléfono: "))
+    password = input("Ingresa tu contraseña: ")
+    num_account = BancoBienestar.addNewAccount(Account(name, age, sex,phone_number,password))
+    clearConsole()
+    print("Usuario registrado con éxito.")
+    print("Por favor, guarda tu numero de cuenta.")
+    print(f'Numero de cuenta: {num_account}')
+    pauseConsole()
+
+def transfer(account):
+    userAccount = 1
+    while userAccount != -1:
+        clearConsole()
+        userAccount = int(input("Ingresa el numero de cuenta a transferir (Ingresa -1 para salir): "))
+        if BancoBienestar.transferToAccount(account, userAccount):
+            print("La transferencia ha sido realizada con éxito")
+        else:
+            print("Hubo un error, favor de verificar el numero de cuenta ingresado.")
+        pauseConsole();
+
+# (self, name, age, sex, phone_number, password, initial_balance=0)     
 
 op = 1
 BancoBienestar = Bank("Bienestar")

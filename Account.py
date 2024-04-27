@@ -12,7 +12,7 @@ class Account(Person):
     def sendAmount(self, amount, recipient_account):
         if self._balance >= amount:
             self._balance -= amount
-            recipient_account.receiveAmount(amount)
+            recipient_account.receiveAmount(amount, self)
             self._transactions.append(f'Transferencia enviada: -${amount}.')
         else:
             print("Fondos insuficientes para realizar el envío")
@@ -20,3 +20,7 @@ class Account(Person):
     def receiveAmount(self, amount):
         self._balance += amount
         self._transactions.append(f'Transferencia recibida: +${amount}.')
+
+    def receiveAmount(self, amount, account):
+        self._balance += amount
+        self._transactions.append(f'Transferencia recibida: +${amount} por ${account._name}')

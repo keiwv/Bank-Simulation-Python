@@ -5,7 +5,7 @@ class Account(Person):
         super().__init__(name, age, sex)
         self._phone_number = phone_number
         self._balance = initial_balance
-        self._transactions = []
+        self.transactions = []
         self._password = password
         self.account_number = 0
 
@@ -13,14 +13,23 @@ class Account(Person):
         if self._balance >= amount:
             self._balance -= amount
             recipient_account.receiveAmount(amount, self)
-            self._transactions.append(f'Transferencia enviada: -${amount}.')
+            self.transactions.append(f'Transferencia enviada: -${amount}.')
+            return True
         else:
-            print("Fondos insuficientes para realizar el envío")
+            return False
 
-    def receiveAmount(self, amount):
+    def receiveDeposit(self, amount):
         self._balance += amount
-        self._transactions.append(f'Transferencia recibida: +${amount}.')
+        self.transactions.append(f'Deposito recibido: +${amount}.')
 
     def receiveAmount(self, amount, account):
         self._balance += amount
-        self._transactions.append(f'Transferencia recibida: +${amount} por ${account._name}')
+        self.transactions.append(f'Transferencia recibida: +${amount} por ${account.name}')
+
+    def withdraw(self, amount):
+        if self._balance >= amount:
+            self._balance -= amount
+            self.transactions.append(f'Dinero retirado: -${amount}.')
+            return True
+        else:
+            return False

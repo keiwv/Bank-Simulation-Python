@@ -15,14 +15,25 @@ class Bank:
         return account.account_number
 
     def displayAllAccounts(self):
+        print("------------- CUENTAS ---------------")
         for account in self._accounts:
-            print(f"Nombre: {account._name}")
+            print(f"Nombre: {account.name}")
             print(f"Edad: {account._age}")
             print(f"Sexo: {account._sex}")
             print(f"Número de teléfono: {account._phone_number}")
             print(f"Número de cuenta: {account.account_number}")
             print(f"Saldo: ${account._balance}")
-            print()
+            print("-------------------------------------")
+
+    def displayAllTransactions(self):
+        print("---------- TRANSFERENCIAS -----------")
+        for account in self._accounts:
+            print(f'Nombre del usuario: {account.name}')
+            print(f'Numero de cuenta: {account.account_number}')
+            for transfer in account.transactions:
+                print(transfer)
+            print("-------------------------------------")
+
 
     def generateAccountNumber(self):
         while True:
@@ -38,8 +49,28 @@ class Bank:
     
     def transferToAccount(self, send_account, receive_account):
         for account in self._accounts:
-            if receive_account.account_number == account.account_numer:
+            if receive_account == account.account_number:
                 amountToSend = int(input("Ingresa la cantidad a enviar: "))
-                send_account.sendAmount(amountToSend, receive_account)
+                if send_account.sendAmount(amountToSend, account):
+                    print("Se ha realizado la transferencia con exito")
+                    return True
+                else:
+                    return False
+                
+        return False
+
+    def deposit(self, account):
+        for accountDeposit in self._accounts:
+            if account == accountDeposit.account_number:
+                amountToDeposit = int(input("Ingrese la cantidad a depositar: "))
+                accountDeposit.receiveDeposit(amountToDeposit)
+                return True
+        return False
+
+    def withdraw(self, account):
+        for accountWithdraw in self._accounts:
+            if account == accountWithdraw.account_number:
+                amountToWithdraw = int(input("Ingresa la cantidad a retirar: "))
+                accountWithdraw.withdraw(amountToWithdraw)
                 return True
         return False

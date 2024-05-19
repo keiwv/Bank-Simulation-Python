@@ -3,6 +3,7 @@ from Account import Account
 import os
 import platform
 
+# Verify platform for cleaning screen
 system = platform.system()
 
 if system == "Windows":
@@ -83,6 +84,8 @@ def loggedInMenu(userAccount):
         userOption = loggedInMsg()
         if userOption == 1:
             transfer(userAccount)
+        if userOption == 2:
+            deposit(userAccount)
 
 # ----------- REGISTER FUNCTION -----------
 def registerUser():
@@ -100,16 +103,56 @@ def registerUser():
     print(f'Numero de cuenta: {num_account}')
     pauseConsole()
 
+# ---------- TRANSFER MONEY FUNCTION ------
 def transfer(account):
     userAccount = 1
     while userAccount != -1:
         clearConsole()
         userAccount = int(input("Ingresa el numero de cuenta a transferir (Ingresa -1 para salir): "))
-        if BancoBienestar.transferToAccount(account, userAccount):
-            print("La transferencia ha sido realizada con éxito")
+
+        if userAccount == account.account_number:
+            print("No puedes transferir dinero a la misma cuenta")
         else:
-            print("Hubo un error, favor de verificar el numero de cuenta ingresado.")
+            if userAccount != -1:
+                if not BancoBienestar.transferToAccount(account, userAccount):
+                    print("No existen demasiados fondos o la cuenta no existe.")
+
+
         pauseConsole();
+
+def deposit(account):
+    userAccount = 1
+    while userAccount != -1:
+        clearConsole()
+        userAccount = int(input("Ingresa el numero de cuenta a depositar (Ingresa -1 para salir): "))
+        if userAccount != -1:
+            if userAccount == account.account_number:
+                if BancoBienestar.deposit(userAccount):
+                    print("Se ha realizado el deposito con exito. ")
+                else:
+                    print("No se ha podido realizar el deposito")
+            else:
+                print("Numero de cuenta equivocado.")
+            pauseConsole()
+
+def withdraw(account):
+    userAccount = 1
+    while userAccount != -1:
+        clearConsole()
+        userAccount = int(input("Ingresa el numero de cuenta a retirar (Ingresa -1 para salir): "))
+        if userAccount != -1:
+            if userAccount == account.account_number:
+                if BancoBienestar.deposit(userAccount):
+                    print("Se ha realizado el deposito con exito. ")
+                else:
+                    print("No se ha podido realizar el deposito")
+            else:
+                print("Numero de cuenta equivocado.")
+            pauseConsole()
+    
+        
+
+
 
 # (self, name, age, sex, phone_number, password, initial_balance=0)     
 
@@ -118,11 +161,10 @@ BancoBienestar = Bank("Bienestar")
 
 menu()
 
-
-
-
-
-
-
-
+# DISPLAY INFORMATION
+clearConsole()
+print()
+BancoBienestar.displayAllAccounts()
+print()
+BancoBienestar.displayAllTransactions()
 

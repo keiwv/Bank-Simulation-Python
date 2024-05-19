@@ -28,8 +28,8 @@ class Bank:
     def displayAllTransactions(self):
         print("---------- TRANSFERENCIAS -----------")
         for account in self._accounts:
-            print(f'Nombre del usuario: {account.name}')
-            print(f'Numero de cuenta: {account.account_number}')
+            print(f' Nombre del usuario: {account.name}')
+            print(f' Numero de cuenta: {account.account_number}')
             for transfer in account.transactions:
                 print(transfer)
             print("-------------------------------------")
@@ -71,6 +71,18 @@ class Bank:
         for accountWithdraw in self._accounts:
             if account == accountWithdraw.account_number:
                 amountToWithdraw = int(input("Ingresa la cantidad a retirar: "))
-                accountWithdraw.withdraw(amountToWithdraw)
-                return True
+                if accountWithdraw.withdraw(amountToWithdraw):
+                    return True
+                else:
+                    return False
         return False
+    
+    def showBalance(self, account):
+        for accountBalance in self._accounts:
+            if account.account_number == accountBalance.account_number:
+                print(f'Nombre: {account.name}')
+                print(f'Numero de cuenta: {account.account_number}')
+                print(f'Saldo: ${account._balance}')
+                return
+        print("La cuenta no existe o no fue encontrada. ")
+

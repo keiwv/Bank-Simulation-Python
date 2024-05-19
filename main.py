@@ -86,6 +86,10 @@ def loggedInMenu(userAccount):
             transfer(userAccount)
         if userOption == 2:
             deposit(userAccount)
+        if userOption == 3:
+            withdraw(userAccount)
+        if userOption == 4:
+            showBalance(userAccount)
 
 # ----------- REGISTER FUNCTION -----------
 def registerUser():
@@ -142,13 +146,18 @@ def withdraw(account):
         userAccount = int(input("Ingresa el numero de cuenta a retirar (Ingresa -1 para salir): "))
         if userAccount != -1:
             if userAccount == account.account_number:
-                if BancoBienestar.deposit(userAccount):
-                    print("Se ha realizado el deposito con exito. ")
+                if BancoBienestar.withdraw(userAccount):
+                    print("Se ha realizado el retiro con exito. ")
                 else:
-                    print("No se ha podido realizar el deposito")
+                    print("No se ha podido realizar el retiro")
             else:
                 print("Numero de cuenta equivocado.")
             pauseConsole()
+
+def showBalance(account):
+    clearConsole()
+    BancoBienestar.showBalance(account)
+    pauseConsole()
     
         
 
@@ -167,4 +176,3 @@ print()
 BancoBienestar.displayAllAccounts()
 print()
 BancoBienestar.displayAllTransactions()
-

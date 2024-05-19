@@ -13,23 +13,23 @@ class Account(Person):
         if self._balance >= amount:
             self._balance -= amount
             recipient_account.receiveAmount(amount, self)
-            self.transactions.append(f'Transferencia enviada: -${amount}.')
+            self.transactions.append(f' Transferencia enviada: -${amount}.')
             return True
         else:
             return False
 
     def receiveDeposit(self, amount):
         self._balance += amount
-        self.transactions.append(f'Deposito recibido: +${amount}.')
+        self.transactions.append(f' Deposito recibido: +${amount}.')
 
     def receiveAmount(self, amount, account):
         self._balance += amount
-        self.transactions.append(f'Transferencia recibida: +${amount} por ${account.name}')
+        self.transactions.append(f' Transferencia recibida: +${amount} por {account.name}')
 
     def withdraw(self, amount):
         if self._balance >= amount:
             self._balance -= amount
-            self.transactions.append(f'Dinero retirado: -${amount}.')
+            self.transactions.append(f' Dinero retirado: -${amount}.')
             return True
         else:
             return False
